@@ -1,3 +1,5 @@
+import * as PIXI from "pixi.js";
+
 function component() {
   var element = document.createElement("div");
 
@@ -6,5 +8,12 @@ function component() {
 
   return element;
 }
+
+var type = "WebGL";
+if (!PIXI.utils.isWebGLSupported()) {
+  type = "canvas";
+}
+
+PIXI.utils.sayHello(type);
 
 document.body.appendChild(component());
