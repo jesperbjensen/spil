@@ -12,7 +12,9 @@ var sound = new SoundEffect("sounds/boing.mp3");
 
 PIXI.utils.sayHello(type);
 
-PIXI.loader.add(["images/testImage.png", "images/square.png"]).load(setup);
+PIXI.loader
+  .add(["images/testImage.png", "images/square.png", "images/tileset.png"])
+  .load(setup);
 
 function setup() {
   var renderer = PIXI.autoDetectRenderer(256, 256);
@@ -37,7 +39,27 @@ function setup() {
   basicText.x = 50;
   basicText.y = 10;
 
+  var texture = new PIXI.Texture(
+    PIXI.loader.resources["images/tileset.png"].texture,
+    new PIXI.Rectangle(0, 0, 16, 16)
+  );
+  var tile = new PIXI.Sprite(texture);
+  var texture2 = new PIXI.Texture(
+    PIXI.loader.resources["images/tileset.png"].texture,
+    new PIXI.Rectangle(0, 16, 16, 16)
+  );
+  var tile2 = new PIXI.Sprite(texture2);
+
+  //Position the rocket sprite on the canvas
+  tile.x = 32;
+  tile.y = 32;
+  tile2.x = 32;
+  tile2.y = 32 + 16;
+
   var stage = new PIXI.Container();
+  //Add the rocket to the stage
+  stage.addChild(tile);
+  stage.addChild(tile2);
   stage.addChild(basicText);
   stage.addChild(sprite);
   stage.addChild(square);
