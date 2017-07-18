@@ -39,7 +39,16 @@ function setup() {
   sprite.vx = 0;
   sprite.vy = 0;
 
+  var style = new PIXI.TextStyle({
+    fontSize: 12,
+    fill: "#fff"
+  });
+  var basicText = new PIXI.Text("World domination is near!", style);
+  basicText.x = 50;
+  basicText.y = 10;
+
   var stage = new PIXI.Container();
+  stage.addChild(basicText);
   stage.addChild(sprite);
   stage.addChild(square);
   renderer.render(stage);

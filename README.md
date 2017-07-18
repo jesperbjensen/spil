@@ -5,6 +5,7 @@ Totally awesome feature, that no other game I've played today has:
 * The image can't escape - no matter how hard you press the arrow keys!
 * The red image hates the blue image, so it can't overlap it!
 * It can play sounds
+* High tech text rendering
 
 
 Yes - I am a programming genius.
