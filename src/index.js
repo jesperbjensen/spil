@@ -61,6 +61,19 @@ function setup() {
     sprite.x += sprite.vx;
     sprite.y += sprite.vy;
 
+    if (sprite.x < 0) {
+      sprite.x = 0;
+    }
+    if (sprite.y < 0) {
+      sprite.y = 0;
+    }
+    if (sprite.y + sprite.height > 256) {
+      sprite.y = 256 - sprite.height;
+    }
+    if (sprite.x + sprite.width > 256) {
+      sprite.x = 256 - sprite.width;
+    }
+
     //Render the stage to see the animation
     renderer.render(stage);
   }
