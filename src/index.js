@@ -1,31 +1,21 @@
 import * as PIXI from "pixi.js";
-import keyboard from "./keyboard";
 import { Howl } from "howler";
+import * as gamepad from "./gamepad";
+import SoundEffect from "./SoundEffect";
 
 var type = "WebGL";
 if (!PIXI.utils.isWebGLSupported()) {
   type = "canvas";
 }
 
-var sound = new Howl({
-  src: ["sounds/boing.mp3"]
-});
+var sound = new SoundEffect("sounds/boing.mp3");
 
 PIXI.utils.sayHello(type);
 
 PIXI.loader.add(["images/testImage.png", "images/square.png"]).load(setup);
 
 function setup() {
-  var left = keyboard(37),
-    up = keyboard(38),
-    right = keyboard(39),
-    down = keyboard(40);
-
   var renderer = PIXI.autoDetectRenderer(256, 256);
-  //   renderer.view.style.position = "absolute";
-  //   renderer.view.style.display = "block";
-  //   renderer.autoResize = true;
-  //   renderer.resize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.view);
 
   var sprite = new PIXI.Sprite(
@@ -57,19 +47,19 @@ function setup() {
     //Loop this function at 60 frames per second
     requestAnimationFrame(gameLoop);
 
-    if (right.isDown) {
+    if (gamepad.right.isDown) {
       sprite.vx += 1;
     }
 
-    if (left.isDown) {
+    if (gamepad.left.isDown) {
       sprite.vx -= 1;
     }
 
-    if (up.isDown) {
+    if (gamepad.up.isDown) {
       sprite.vy -= 1;
     }
 
-    if (down.isDown) {
+    if (gamepad.down.isDown) {
       sprite.vy += 1;
     }
 
@@ -78,25 +68,34 @@ function setup() {
     sprite.vx *= 1 - drag;
     sprite.vy *= 1 - drag;
 
+    sprite.vx = sprite.vx;
+    sprite.vy = sprite.vy;
+
     var oldX = sprite.x;
     var oldY = sprite.y;
     sprite.x += sprite.vx;
     sprite.y += sprite.vy;
 
+    console.log(sprite.x, sprite.y, sprite.vx, sprite.vy);
+
     if (sprite.x < 0) {
       sprite.x = 0;
+      sprite.vx = 0;
       boing();
     }
     if (sprite.y < 0) {
       sprite.y = 0;
+      sprite.vy = 0;
       boing();
     }
     if (sprite.y + sprite.height > 256) {
       sprite.y = 256 - sprite.height;
+      sprite.vy = 0;
       boing();
     }
     if (sprite.x + sprite.width > 256) {
       sprite.x = 256 - sprite.width;
+      sprite.vx = 0;
       boing();
     }
 
@@ -122,9 +121,7 @@ function setup() {
   }
 
   function boing() {
-    if (!sound.playing()) {
-      sound.play();
-    }
+    sound.play();
   }
   //Start the game loop
   gameLoop();
