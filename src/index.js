@@ -1,14 +1,5 @@
 import * as PIXI from "pixi.js";
 
-function component() {
-  var element = document.createElement("div");
-
-  // Lodash, currently included via a script, is required for this line to work
-  element.innerHTML = "Hello world!";
-
-  return element;
-}
-
 var type = "WebGL";
 if (!PIXI.utils.isWebGLSupported()) {
   type = "canvas";
@@ -16,4 +7,12 @@ if (!PIXI.utils.isWebGLSupported()) {
 
 PIXI.utils.sayHello(type);
 
-document.body.appendChild(component());
+var renderer = PIXI.autoDetectRenderer(256, 256);
+renderer.view.style.position = "absolute";
+renderer.view.style.display = "block";
+renderer.autoResize = true;
+renderer.resize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.view);
+
+var stage = new PIXI.Container();
+renderer.render(stage);
