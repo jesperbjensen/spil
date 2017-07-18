@@ -13,7 +13,7 @@ var sound = new Howl({
 
 PIXI.utils.sayHello(type);
 
-PIXI.loader.add("images/testImage.png").load(setup);
+PIXI.loader.add(["images/testImage.png", "images/square.png"]).load(setup);
 
 function setup() {
   var left = keyboard(37),
@@ -31,11 +31,17 @@ function setup() {
   var sprite = new PIXI.Sprite(
     PIXI.loader.resources["images/testImage.png"].texture
   );
+  var square = new PIXI.Sprite(
+    PIXI.loader.resources["images/square.png"].texture
+  );
+  square.x = 128;
+  square.y = 128;
   sprite.vx = 0;
   sprite.vy = 0;
 
   var stage = new PIXI.Container();
   stage.addChild(sprite);
+  stage.addChild(square);
   renderer.render(stage);
 
   function gameLoop() {
@@ -63,6 +69,8 @@ function setup() {
     sprite.vx *= 1 - drag;
     sprite.vy *= 1 - drag;
 
+    var oldX = sprite.x;
+    var oldY = sprite.y;
     sprite.x += sprite.vx;
     sprite.y += sprite.vy;
 
@@ -83,8 +91,24 @@ function setup() {
       boing();
     }
 
+    if (isCollide(sprite, square)) {
+      sprite.x = oldX;
+      sprite.y = oldY;
+      sprite.vx *= -1 * 0.1;
+      sprite.vy *= -1 * 0.1;
+    }
+
     //Render the stage to see the animation
     renderer.render(stage);
+  }
+
+  function isCollide(a, b) {
+    return !(
+      a.y + a.height < b.y ||
+      a.y > b.y + b.height ||
+      a.x + a.width < b.x ||
+      a.x > b.x + b.width
+    );
   }
 
   function boing() {
