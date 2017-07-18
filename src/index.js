@@ -2,6 +2,8 @@ import * as PIXI from "pixi.js";
 import { Howl } from "howler";
 import * as gamepad from "./gamepad";
 import SoundEffect from "./SoundEffect";
+import Map from "./Map";
+import * as map1 from "./maps/map1";
 
 var type = "WebGL";
 if (!PIXI.utils.isWebGLSupported()) {
@@ -43,6 +45,9 @@ function setup() {
     PIXI.loader.resources["images/tileset.png"].texture,
     new PIXI.Rectangle(0, 0, 16, 16)
   );
+
+  var map = new Map("images/tileset.png", map1);
+
   var tile = new PIXI.Sprite(texture);
   var texture2 = new PIXI.Texture(
     PIXI.loader.resources["images/tileset.png"].texture,
@@ -58,12 +63,32 @@ function setup() {
 
   var stage = new PIXI.Container();
   //Add the rocket to the stage
-  stage.addChild(tile);
-  stage.addChild(tile2);
+  map.onObject = object => {
+    if (object.gid == 169) {
+      addLight(stage, map, object.x, object.y);
+    }
+  };
+  map.addToStage(stage);
   stage.addChild(basicText);
   stage.addChild(sprite);
   stage.addChild(square);
   renderer.render(stage);
+
+  function addLight(stage, map, x, y) {
+    let baseTextures = [169, 170, 171, 172, 173, 174, 175, 176];
+    let flameTextures = [153, 154, 155, 156, 157, 158, 159, 160];
+    let index = Math.floor(Math.random() * baseTextures.length);
+    var texture = map.getTileTexture(baseTextures[index]);
+    var texture2 = map.getTileTexture(flameTextures[index]);
+    var tile = new PIXI.Sprite(texture);
+    tile.x = x;
+    tile.y = y - 16;
+    var tile2 = new PIXI.Sprite(texture2);
+    tile2.x = x;
+    tile2.y = y - 32;
+    stage.addChild(tile);
+    stage.addChild(tile2);
+  }
 
   function gameLoop() {
     //Loop this function at 60 frames per second
@@ -97,8 +122,6 @@ function setup() {
     var oldY = sprite.y;
     sprite.x += sprite.vx;
     sprite.y += sprite.vy;
-
-    console.log(sprite.x, sprite.y, sprite.vx, sprite.vy);
 
     if (sprite.x < 0) {
       sprite.x = 0;
