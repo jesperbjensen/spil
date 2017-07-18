@@ -7,7 +7,7 @@ Totally awesome feature, that no other game I've played today has:
 * It can play sounds
 * High tech text rendering
 * It can draw something from a tileset!
-* Basic map rendering. Soon with animated tiles!
+* Basic map rendering. With animated tiles!
 
 Yes - I am a programming genius.
 

@@ -19,6 +19,10 @@ PIXI.loader
   .load(setup);
 
 function setup() {
+  let lights = [];
+  let baseTextures = [169, 170, 171, 172, 173, 174, 175, 176];
+  let flameTextures = [153, 154, 155, 156, 157, 158, 159, 160];
+
   var renderer = PIXI.autoDetectRenderer(256, 256);
   document.body.appendChild(renderer.view);
 
@@ -75,19 +79,19 @@ function setup() {
   renderer.render(stage);
 
   function addLight(stage, map, x, y) {
-    let baseTextures = [169, 170, 171, 172, 173, 174, 175, 176];
-    let flameTextures = [153, 154, 155, 156, 157, 158, 159, 160];
-    let index = Math.floor(Math.random() * baseTextures.length);
-    var texture = map.getTileTexture(baseTextures[index]);
-    var texture2 = map.getTileTexture(flameTextures[index]);
-    var tile = new PIXI.Sprite(texture);
+    let index = Math.floor(Math.random() * 8);
+    var base = map.getTileTexture(baseTextures[index]);
+    var flame = map.getTileTexture(flameTextures[index]);
+    var tile = new PIXI.Sprite(base);
     tile.x = x;
     tile.y = y - 16;
-    var tile2 = new PIXI.Sprite(texture2);
+    var tile2 = new PIXI.Sprite(flame);
     tile2.x = x;
     tile2.y = y - 32;
     stage.addChild(tile);
     stage.addChild(tile2);
+
+    lights.push({ index, base, flame, delta: 0 });
   }
 
   function gameLoop() {
@@ -151,6 +155,20 @@ function setup() {
       sprite.vy *= -1 * 0.1;
       boing();
     }
+
+    lights.forEach(light => {
+      light.delta--;
+      if (light.delta <= 0) {
+        light.delta = 8;
+        let newIndex = light.index + 1;
+        if (newIndex == 8) {
+          newIndex = 0;
+        }
+        light.base.frame = map.getTileRectangle(baseTextures[newIndex]);
+        light.flame.frame = map.getTileRectangle(flameTextures[newIndex]);
+        light.index = newIndex;
+      }
+    });
 
     //Render the stage to see the animation
     renderer.render(stage);

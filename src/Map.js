@@ -5,13 +5,17 @@ export default class Map {
   }
 
   getTileTexture(number) {
-    let textureY = Math.floor((number - 1) / 16);
-    let textureX = Math.round((number - 1) % 16);
     let texture = new PIXI.Texture(
       PIXI.loader.resources[this.tilesetSrc].texture,
-      new PIXI.Rectangle(textureX * 16, textureY * 16, 16, 16)
+      this.getTileRectangle(number)
     );
     return texture;
+  }
+
+  getTileRectangle(number) {
+    let textureY = Math.floor((number - 1) / 16);
+    let textureX = Math.round((number - 1) % 16);
+    return new PIXI.Rectangle(textureX * 16, textureY * 16, 16, 16);
   }
 
   addToStage(stage) {
