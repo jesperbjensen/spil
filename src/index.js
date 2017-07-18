@@ -7,12 +7,21 @@ if (!PIXI.utils.isWebGLSupported()) {
 
 PIXI.utils.sayHello(type);
 
-var renderer = PIXI.autoDetectRenderer(256, 256);
-renderer.view.style.position = "absolute";
-renderer.view.style.display = "block";
-renderer.autoResize = true;
-renderer.resize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.view);
+PIXI.loader.add("images/testImage.png").load(setup);
 
-var stage = new PIXI.Container();
-renderer.render(stage);
+function setup() {
+  var renderer = PIXI.autoDetectRenderer(256, 256);
+  renderer.view.style.position = "absolute";
+  renderer.view.style.display = "block";
+  renderer.autoResize = true;
+  renderer.resize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.view);
+
+  var sprite = new PIXI.Sprite(
+    PIXI.loader.resources["images/testImage.png"].texture
+  );
+
+  var stage = new PIXI.Container();
+  stage.addChild(sprite);
+  renderer.render(stage);
+}
