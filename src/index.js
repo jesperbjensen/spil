@@ -96,6 +96,7 @@ function setup() {
       sprite.y = oldY;
       sprite.vx *= -1 * 0.1;
       sprite.vy *= -1 * 0.1;
+      boing();
     }
 
     //Render the stage to see the animation
